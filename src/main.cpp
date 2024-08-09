@@ -1,4 +1,4 @@
-#include "../include/HttpServer.h"
+#include "HttpServer.h"
 #include <iostream>
 #include <csignal>
 
@@ -20,7 +20,7 @@ int main() {
     std::signal(SIGTERM, handle_signal);
 
     while (!stop) {
-        // Здесь сервер продолжает работать, пока не получит сигнал остановки
+        // Сервер продолжает работать, пока не получит сигнал остановки
     }
 
     server.stop();

@@ -1,7 +1,7 @@
-#include "../include/HttpServer.h"
+#include "HttpServer.h"
 #include <cstring>
 
-HttpServer::HttpServer(unsigned short port) : port(port) {}
+HttpServer::HttpServer(unsigned short port) : daemon(nullptr), port(port) {}
 
 HttpServer::~HttpServer() {
     stop();

@@ -1,7 +1,6 @@
 CC = g++
-CacheDIR = ../cache
-CFLAGS = -Iinclude -I$(CacheDIR)/Unity/src -I$(CacheDIR)/microhttpd/include -I/usr/local/include -I/usr/include -MMD -MP
-LDFLAGS = -L/usr/local/lib -L/usr/lib -L$(CacheDIR)/microhttpd/lib -lmicrohttpd
+CFLAGS = -std=c++11 -Iinclude -Iinclude/libmicrohttpd/include -Iinclude/Unity/src -MMD -MP
+LDFLAGS = -Llib -lmicrohttpd
 
 SRC_DIR = src
 INCLUDE_DIR = include
@@ -18,7 +17,7 @@ TEST_EXEC = $(BUILD_DIR)/test_main
 
 -include $(OBJ_FILES:.o=.d)
 
-.PHONY: all build clean test install install-dependencies
+.PHONY: all build clean test
 
 all: build
 
@@ -35,15 +34,10 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)/.dirstamp
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 test: $(BUILD_DIR)/.dirstamp $(TEST_EXEC)
-	LD_LIBRARY_PATH=$(CacheDIR)/microhttpd/lib ./$(TEST_EXEC)
+	LD_LIBRARY_PATH=lib ./$(TEST_EXEC)
 
 $(TEST_EXEC): $(TEST_OBJ_FILES)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 clean:
 	rm -rf $(BUILD_DIR)
-
-install: install_dependencies
-
-install_dependencies:
-	$(MAKE) -f dependencies.mk install_dependencies CacheDIR=$(CacheDIR)
