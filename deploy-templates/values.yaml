@@ -45,7 +45,7 @@ service:
   port: 8080
 
 ingress:
-  enabled: false
+  enabled: true
   dnsWildcard: eks-sandbox.aws.main.edp.projects.epam.com
   className: ""
   annotations: {}
