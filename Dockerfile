@@ -1,7 +1,7 @@
 FROM ubuntu:24.10
 
 # Copy library
-COPY ../cache/microhttpd /var/lib/microhttpd
+COPY lib /var/lib/microhttpd
 # Copy Application
 COPY target/app /usr/share/app
 
