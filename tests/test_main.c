@@ -1,42 +1,93 @@
-#include <unity.h>
-#include <microhttpd.h>
-#include <iostream>
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
+#include <csignal>
 #include "../include/HttpServer.h"
 
-HttpServer *server;
+// Мок класс для HttpServer
+class MockHttpServer : public HttpServer {
+public:
+    MockHttpServer(int port) : HttpServer(port) {}
+    MOCK_METHOD(bool, start, (), (override));
+    MOCK_METHOD(void, stop, (), (override));
+};
 
-void setUp(void) {
-    // This function will be called before each test
-    server = new HttpServer(8080);
-    if (!server->start()) {
-        TEST_FAIL_MESSAGE("Failed to start server");
+volatile sig_atomic_t stop;
+
+void handle_signal(int signal) {
+    stop = 1;
+}
+
+class ServerTest : public ::testing::Test {
+protected:
+    MockHttpServer server;
+
+    ServerTest() : server(8080) {}
+
+    void SetUp() override {
+        stop = 0;
     }
+};
+
+// Тестирование успешного запуска сервера
+TEST_F(ServerTest, StartServer_Success) {
+    EXPECT_CALL(server, start())
+        .WillOnce(::testing::Return(true));
+    EXPECT_CALL(server, stop())
+        .Times(1);
+
+    ASSERT_TRUE(server.start());
+
+    // Симуляция работы сервера
+    std::thread server_thread([this]() {
+        while (!stop) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Снижение загрузки ЦП
+        }
+        server.stop();
+    });
+
+    std::signal(SIGINT, handle_signal);
+    std::signal(SIGTERM, handle_signal);
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(200)); // Подождать немного перед отправкой сигнала
+    std::raise(SIGINT);
+
+    server_thread.join(); // Дождаться завершения потока
+
+    EXPECT_EQ(stop, 1); // Проверить, что сигнал был обработан
 }
 
-void tearDown(void) {
-    // This function will be called after each test
-    server->stop();
-    delete server;
+// Тестирование неудачного запуска сервера
+TEST_F(ServerTest, StartServer_Failure) {
+    EXPECT_CALL(server, start())
+        .WillOnce(::testing::Return(false));
+
+    ASSERT_FALSE(server.start());
+    EXPECT_EQ(stop, 0); // Проверить, что stop не изменен
 }
 
-void testServerResponds(void) {
-    // This is a placeholder for testing server response
-    // In a real-world scenario, you would use an HTTP client to send a request
-    // and verify the response.
+// Тестирование обработки сигнала
+TEST_F(ServerTest, SignalHandling) {
+    EXPECT_CALL(server, start())
+        .WillOnce(::testing::Return(true));
+    EXPECT_CALL(server, stop())
+        .Times(1);
 
-    // For example, using a library like `libcurl` to perform HTTP requests:
-    // - Set up a client
-    // - Perform a GET request to the server
-    // - Check the response
-    // In this example, we'll simply check that the server started and stopped without error
-    TEST_PASS();
-}
+    ASSERT_TRUE(server.start());
 
-int main(int argc, char **argv) {
-    UNITY_BEGIN();
+    std::thread server_thread([this]() {
+        while (!stop) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Снижение загрузки ЦП
+        }
+        server.stop();
+    });
 
-    RUN_TEST(testServerResponds);
+    std::signal(SIGINT, handle_signal);
+    std::signal(SIGTERM, handle_signal);
 
-    UNITY_END();
-    return 0;
+    std::this_thread::sleep_for(std::chrono::milliseconds(200)); // Подождать немного перед отправкой сигнала
+    std::raise(SIGINT);
+
+    server_thread.join(); // Дождаться завершения потока
+
+    EXPECT_EQ(stop, 1); // Проверить, что сигнал был обработан
 }
