@@ -1,4 +1,4 @@
-prefix=/usr/local
+prefix=/tmp/2
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
@@ -7,7 +7,7 @@ Name: libmicrohttpd
 Description: A library for creating an embedded HTTP server
 Version: 0.9.73
 Requires:
-Requires.private: gnutls
+Requires.private: 
 Conflicts:
 Libs: -L${libdir} -lmicrohttpd
 Libs.private: -lpthread 

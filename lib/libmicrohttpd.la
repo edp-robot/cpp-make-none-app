@@ -5,19 +5,19 @@
 # It is necessary for linking the library.
 
 # The name that we can dlopen(3).
-dlname='libmicrohttpd.12.dylib'
+dlname='libmicrohttpd.so.12'
 
 # Names of this library.
-library_names='libmicrohttpd.12.dylib libmicrohttpd.dylib'
+library_names='libmicrohttpd.so.12.58.0 libmicrohttpd.so.12 libmicrohttpd.so'
 
 # The name of the static archive.
 old_library='libmicrohttpd.a'
 
 # Linker flags that cannot go in dependency_libs.
-inherited_linker_flags='  -pthread'
+inherited_linker_flags=' -pthread'
 
 # Libraries that this one depends upon.
-dependency_libs=' -L/usr/local/Cellar/gnutls/3.8.4/lib -lpthread -lgnutls'
+dependency_libs=' -lpthread'
 
 # Names of additional weak libraries provided by this library
 weak_library_names=''
@@ -38,4 +38,4 @@ dlopen=''
 dlpreopen=''
 
 # Directory that this library needs to be installed in:
-libdir='/usr/local/lib'
+libdir='/tmp/2/lib'
