@@ -31,7 +31,7 @@ build: $(BUILD_DIR)/.dirstamp $(EXEC)
 $(EXEC): $(OBJ_FILES)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
-$(BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp | $(BUILD_DIR)/.dirstamp
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)/.dirstamp
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 test: $(BUILD_DIR)/.dirstamp $(TEST_EXEC)
