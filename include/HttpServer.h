@@ -12,6 +12,15 @@ public:
     bool start();
     void stop();
 
+    // Метод для проверки состояния сервера: запущен он или остановлен
+    bool isRunning() const {
+        return daemon != nullptr;
+    }
+
+    unsigned short getPort() const {
+        return port;
+    }
+
 private:
     struct MHD_Daemon *daemon = nullptr;
     unsigned short port;
