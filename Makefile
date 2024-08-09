@@ -1,6 +1,6 @@
 CC = g++
-CFLAGS = -std=c++11 -Iinclude -Iinclude/libmicrohttpd/include -Iinclude/Unity/src -MMD -MP
-LDFLAGS = -Llib -lmicrohttpd
+CFLAGS = -std=c++11 -Iinclude -MMD -MP
+LDFLAGS = -Llib -lmicrohttpd -Wl,-rpath,lib
 
 SRC_DIR = src
 INCLUDE_DIR = include
