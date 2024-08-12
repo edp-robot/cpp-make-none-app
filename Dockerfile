@@ -6,3 +6,4 @@ COPY lib/ /var/lib/microhttpd/lib
 COPY target/app /usr/share/app
 
 CMD ["sh", "-c", "LD_LIBRARY_PATH=/var/lib/microhttpd/lib /usr/share/app"]
+
