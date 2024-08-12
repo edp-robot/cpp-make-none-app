@@ -1,1 +1,0 @@
-1. Application cpp-make-none has been successfully deployed!!
