@@ -9,7 +9,7 @@ include_directories(include ${CacheDIR}/pkgconfig)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/target)
 
 set(SRC_FILES src/main.cpp src/HttpServer.cpp)
-set(TEST_FILES tests/test_main.cpp)
+set(TEST_FILES tests/test_main.cpp src/HttpServer.cpp)  # Include HttpServer.cpp in the test target
 
 add_executable(app ${SRC_FILES})
 target_link_libraries(app ${CacheDIR}/libmicrohttpd.a)
