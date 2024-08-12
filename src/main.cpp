@@ -20,7 +20,7 @@ int main() {
     std::signal(SIGTERM, handle_signal);
 
     while (!stop) {
-        // Сервер продолжает работать, пока не получит сигнал остановки
+        // The server continues to run until it receives a stop signal
     }
 
     server.stop();
